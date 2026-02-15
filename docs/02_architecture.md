@@ -47,12 +47,12 @@ This avoids cross-origin complexity for auth and keeps the mental model simple.
 ### Transport (recommended)
 
 - Access JWT is returned in JSON and stored in memory by the dashboard.
-- Refresh token is stored as an `HttpOnly; Secure; SameSite=Strict` cookie.
+- Refresh token is returned in JSON and stored client-side (recommended: `sessionStorage`, per-tab).
 
 With this approach:
 
 - Backend APIs authenticate requests via `Authorization` header (not cookies), so CSRF tokens are not required for state-changing requests.
-- Refresh endpoint uses the refresh cookie; it should be designed to be safe under CSRF (SameSite=Strict; minimal side effects).
+- Refresh endpoint uses the refresh token in the request body and rotates it on every use.
 
 ## Email flows
 

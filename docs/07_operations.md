@@ -19,9 +19,6 @@ Proposed env vars:
 - `JWT_SIGNING_KEY` (or reuse `DJANGO_SECRET_KEY`; recommended separate key)
 - `JWT_ACCESS_TTL_SECONDS=900`
 - `JWT_REFRESH_TTL_SECONDS=2592000` (30 days)
-- `JWT_REFRESH_COOKIE_NAME=beacon_refresh`
-- `JWT_REFRESH_COOKIE_SECURE=true`
-- `JWT_REFRESH_COOKIE_SAMESITE=Strict`
 
 ### Next.js
 

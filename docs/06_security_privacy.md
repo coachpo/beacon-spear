@@ -10,7 +10,10 @@ This app has two primary attack surfaces:
 - Dashboard API auth uses **JWT access tokens**:
   - client sends `Authorization: Bearer <access_token>` on authenticated `/api/*` requests
   - access tokens are short-lived
-- Session continuity uses a **refresh token** stored server-side (hashed) and delivered to the browser as an `HttpOnly; Secure; SameSite=Strict` cookie.
+- Session continuity uses a **refresh token** stored server-side (hashed) and delivered to the browser.
+- Refresh tokens are rotated on every use; clients must persist the latest refresh token.
+- Because refresh tokens are no longer HttpOnly cookies, the dashboard must treat **XSS as full account takeover**.
+  - Recommended client storage: refresh token in `sessionStorage` (per-tab) and access token in memory only.
 - Because authenticated APIs do not rely on ambient cookies for auth, **CSRF tokens are not required** for state-changing API requests.
 - Password storage: strong hashing (Django defaults).
 

@@ -574,35 +574,12 @@ paths:
       tags: [auth]
       summary: Login (JWT)
       description: |
-        Returns a short-lived access token (JWT). A refresh token is also set via `Set-Cookie`.
+        Returns a short-lived access token (JWT) and a refresh token.
       requestBody:
         required: true
         content:
           application/json:
             schema: { $ref: "#/components/schemas/LoginRequest" }
-      responses:
-        "200":
-          description: OK (refresh cookie set)
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  access_token: { type: string }
-                  user: { $ref: "#/components/schemas/User" }
-                required: [access_token, user]
-        "401":
-          description: Invalid credentials
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-  /api/auth/refresh:
-    post:
-      tags: [auth]
-      summary: Refresh access token
-      description: |
-        Uses a refresh token (cookie) to mint a new short-lived access token (JWT).
       responses:
         "200":
           description: OK
@@ -613,8 +590,43 @@ paths:
                 additionalProperties: false
                 properties:
                   access_token: { type: string }
+                  refresh_token: { type: string }
                   user: { $ref: "#/components/schemas/User" }
-                required: [access_token, user]
+                required: [access_token, refresh_token, user]
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+  /api/auth/refresh:
+    post:
+      tags: [auth]
+      summary: Refresh access token
+      description: |
+        Uses a refresh token to mint a new short-lived access token (JWT).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                refresh_token: { type: string }
+              required: [refresh_token]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  access_token: { type: string }
+                  refresh_token: { type: string }
+                  user: { $ref: "#/components/schemas/User" }
+                required: [access_token, refresh_token, user]
         "401":
           description: Not authenticated (missing/invalid refresh token)
           content:
@@ -623,8 +635,16 @@ paths:
   /api/auth/logout:
     post:
       tags: [auth]
-      security: [{ bearerAuth: [] }]
       summary: Logout (clears session)
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                refresh_token: { type: string }
       responses:
         "204":
           description: Logged out

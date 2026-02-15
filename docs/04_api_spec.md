@@ -17,9 +17,9 @@ Backend uses JWT access tokens for authenticated endpoints.
 Recommended endpoints:
 
 - `POST /api/auth/signup` — create account + send verification email
-- `POST /api/auth/login` — returns access JWT; sets refresh token cookie
-- `POST /api/auth/refresh` — returns new access JWT (uses refresh cookie)
-- `POST /api/auth/logout` — revokes refresh token; clears refresh cookie
+- `POST /api/auth/login` — returns access JWT + refresh token
+- `POST /api/auth/refresh` — body `{ "refresh_token": "..." }` → returns new access JWT + refresh token (refresh token rotation)
+- `POST /api/auth/logout` — body `{ "refresh_token": "..." }` (optional) → revokes refresh token; client can also drop tokens locally
 - `GET /api/auth/me` — current user + verification status (requires Authorization)
 - `POST /api/auth/resend-verification` — send a new verification email (rate limited)
 - `POST /api/auth/verify-email` — verify using one-time token
