@@ -2,9 +2,9 @@
 
 Beacon Spear is a small web app for ingesting arbitrary UTF-8 message payloads, storing them, and forwarding them via user-defined rules to notification channels (Bark v2 only in v0.1).
 
-This repository currently contains **design documents only** (no implementation yet).
+This repository contains design documents and an initial v0.1 implementation.
 
-Implementation will live in **separate git submodules**:
+Implementation lives in **git submodules**:
 
 - `backend/` — Django backend + worker
 - `frontend/` — Next.js dashboard (latest stable)
@@ -39,3 +39,38 @@ Implementation will live in **separate git submodules**:
 
 - Do you want any global admin functions (ban users, view system health), or user-only?
 - Should batch delete be soft-delete only, or also provide an irreversible “hard delete”?
+
+Current implementation defaults:
+- user-only (no global admin features beyond Django admin)
+- soft-delete only
+
+## Local dev (quick)
+
+Backend:
+
+```bash
+cd backend
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000
+```
+
+Worker:
+
+```bash
+cd backend
+. .venv/bin/activate
+python manage.py deliveries_worker
+```
+
+Frontend:
+
+```bash
+cd frontend
+pnpm install
+cp .env.example .env.local
+pnpm dev
+```
