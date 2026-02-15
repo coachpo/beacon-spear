@@ -4,7 +4,7 @@
 
 Beacon Spear provides:
 
-1) A per-user message ingestion HTTP API (token-based), where the payload is an arbitrary UTF‑8 string (no validation).
+1) A per-user message ingestion HTTP API (endpoint_id + header key), where the payload is an arbitrary UTF‑8 string (no validation).
 2) A web UI to manage users, ingest endpoints, messages, channels (Bark, ntfy, MQTT), and forwarding rules.
 3) A background worker that forwards messages to channels according to rules with retries.
 
@@ -38,11 +38,12 @@ Beacon Spear provides:
 - As a user, I can resend the verification email if I didn’t receive it.
 - As a user, I can change my password while logged in.
 - As a user, I can change my email address (and re-verify it).
+- As a user, I can permanently delete my account.
 
 ### Ingest endpoints
 
-- As a user, I can create multiple ingest endpoints (tokens) for different sources.
-- As a user, I can revoke an ingest endpoint token at any time.
+- As a user, I can create multiple ingest endpoints for different sources.
+- As a user, I can revoke an ingest endpoint at any time.
 - As a user, I can copy an endpoint’s ingest URL and test it with curl.
 
 ### Messages
@@ -84,7 +85,8 @@ Beacon Spear provides:
 
 ### Ingest
 
-- Endpoint: `POST /api/ingest/{token}`
+- Endpoint: `POST /api/ingest/{endpoint_id}`
+- Auth: `X-Beacon-Ingest-Key: <ingest_key>`
 - Payload: request body decoded as UTF‑8 string
 - Max payload: 1MB; reject larger payload with HTTP `413 Payload Too Large`
 - No payload validation; store as-is
@@ -94,7 +96,7 @@ Beacon Spear provides:
   - remote IP
   - user agent
   - headers (with sensitive values redacted)
-- Ingest must be authenticated by the token in the URL.
+- Ingest must be authenticated by the key in the `X-Beacon-Ingest-Key` header.
 
 ### Storage
 

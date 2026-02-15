@@ -4,7 +4,7 @@ This document describes HTTP endpoints at a high level. The app will expose:
 
 - **Dashboard UI** (Next.js) under `/`
 - **Backend JSON API** under `/api/...`
-- **Ingest API** under `/api/ingest/{token}` (public, token-authenticated)
+- **Ingest API** under `/api/ingest/{endpoint_id}` (public, header-authenticated)
 
 ## Auth (backend JSON, JWT)
 
@@ -27,6 +27,7 @@ Recommended endpoints:
 - `POST /api/auth/reset-password` — set new password using one-time token
 - `POST /api/auth/change-email` — change email + re-verify
 - `POST /api/auth/change-password` — change password
+- `POST /api/auth/delete-account` — permanently delete account
 
 ## Auth (dashboard routes)
 
@@ -38,9 +39,11 @@ Dashboard pages are implemented in Next.js (paths are suggested):
 
 ## Ingest API
 
-### POST /api/ingest/{token}
+### POST /api/ingest/{endpoint_id}
 
-- Auth: ingest endpoint token
+- Auth:
+  - required header: `X-Beacon-Ingest-Key: <ingest_key>`
+  - endpoint identified by path parameter `{endpoint_id}`
 - Body: arbitrary UTF‑8 text
 - Limits:
   - `Content-Length` must be ≤ 1MB when present
@@ -55,7 +58,7 @@ Dashboard pages are implemented in Next.js (paths are suggested):
 - Response:
   - `201 Created` with `{ "message_id": "..." }`
 - Errors:
-  - `401` invalid token / revoked
+  - `401` auth failure (missing/invalid key, unknown/revoked endpoint)
   - `403` user not verified or disabled (if enforced)
   - `413` payload too large
   - `400` invalid UTF‑8
@@ -70,7 +73,7 @@ All endpoints (except ingest and auth endpoints as noted) require:
 ### Ingest endpoints
 
 - `GET /api/ingest-endpoints`
-- `POST /api/ingest-endpoints` → returns token once
+- `POST /api/ingest-endpoints` → returns ingest key once
 - `POST /api/ingest-endpoints/{id}/revoke`
 
 ### Messages

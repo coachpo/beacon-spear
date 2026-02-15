@@ -2,7 +2,7 @@
 
 This app has two primary attack surfaces:
 
-- public ingest endpoints (token in URL)
+- public ingest endpoints (`endpoint_id` in URL + `X-Beacon-Ingest-Key` header)
 - self-signup and email flows
 
 ## Authentication & sessions
@@ -36,12 +36,12 @@ Security note:
   - expiry (e.g., 1 hour)
 - Rate limit reset requests per email/IP to prevent abuse.
 
-## Ingest token security
+## Ingest key security
 
-- Ingest endpoint token is a long random secret (>= 32 bytes).
-- Store only a hash of the token.
-- Token is displayed only once at creation time.
-- Revoked tokens are rejected.
+- Ingest key is a long random secret (>= 32 bytes).
+- Store only a hash of the ingest key.
+- Ingest key is displayed only once at creation time.
+- Revoked endpoints are rejected.
 
 ## Payload handling
 

@@ -4,7 +4,7 @@
 
 1) **Django backend**
    - JSON APIs for the dashboard
-   - Ingest endpoint: `POST /api/ingest/{token}`
+   - Ingest endpoint: `POST /api/ingest/{endpoint_id}` (requires `X-Beacon-Ingest-Key`)
    - Email sending for verification + password reset (SMTP)
    - JWT auth for dashboard APIs (no Django session cookies)
 
@@ -26,7 +26,7 @@
 - Dashboard: JWT access token sent as `Authorization: Bearer <token>`
   - Backend issues short-lived access JWTs
   - Dashboard refreshes access tokens using a refresh token
-- Ingest API: token in URL path; no JWT required
+- Ingest API: `endpoint_id` in URL path + `X-Beacon-Ingest-Key` header; no JWT required
 
 ## Deployment routing (simple)
 
@@ -78,8 +78,8 @@ Standard Django-style flow:
 
 ## Message ingest flow
 
-1) Request `POST /api/ingest/{token}`
-2) Identify ingest endpoint by token (constant-time compare against stored hash)
+1) Request `POST /api/ingest/{endpoint_id}`
+2) Identify ingest endpoint by id; validate `X-Beacon-Ingest-Key` (constant-time compare against stored hash)
 3) Enforce:
    - UTF‑8 decoding (reject invalid)
    - body size ≤ 1MB (reject > 1MB)
