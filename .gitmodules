@@ -1,10 +1,10 @@
 [submodule "backend"]
 	path = backend
-	url = /tmp/beacon-spear-backend
+	url = git@github.com:coachpo/beacon-spear-backend.git
 [submodule "frontend"]
 	path = frontend
-	url = /tmp/beacon-spear-frontend
+	url = git@github.com:coachpo/beacon-spear-frontend.git
 [submodule "edge"]
 	path = edge
-	url = /tmp/beacon-spear-edge
+	url = git@github.com:coachpo/beacon-spear-edge.git
 	branch = main
