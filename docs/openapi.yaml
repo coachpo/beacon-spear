@@ -41,11 +41,8 @@ components:
       in: path
       required: true
       schema:
-        anyOf:
-          - type: string
-            format: uuid
-          - type: string
-            pattern: "^[0-9a-fA-F]{32}$"
+        type: string
+        pattern: "^[0-9a-fA-F]{32}$"
   schemas:
     Error:
       type: object
@@ -846,55 +843,6 @@ paths:
       tags: [ingest]
       summary: Ingest a message
       description: |
-        Accepts arbitrary UTF-8 text (no validation). Max size 1MB; oversize is rejected.
-        Any `Content-Type` is accepted; body is treated as UTF-8.
-      security: [{ ingestKeyAuth: [] }]
-      parameters:
-        - $ref: "#/components/parameters/EndpointIdParam"
-      requestBody:
-        required: true
-        content:
-          text/plain:
-            schema:
-              type: string
-      responses:
-        "201":
-          description: Message stored
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  message_id: { $ref: "#/components/schemas/UUID" }
-                required: [message_id]
-        "400":
-          description: Invalid UTF-8 or invalid request
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-        "401":
-          description: Auth failure (missing/invalid ingest key, unknown/revoked/deleted endpoint)
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-        "403":
-          description: Forbidden (e.g., email not verified)
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-        "413":
-          description: Payload too large
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/Error" }
-  /api/i/{endpoint_id}:
-    post:
-      tags: [ingest]
-      summary: Ingest a message (alias)
-      description: |
-        Alias for `POST /api/ingest/{endpoint_id}`.
-
         Accepts arbitrary UTF-8 text (no validation). Max size 1MB; oversize is rejected.
         Any `Content-Type` is accepted; body is treated as UTF-8.
       security: [{ ingestKeyAuth: [] }]

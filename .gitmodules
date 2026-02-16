@@ -1,9 +1,11 @@
 [submodule "backend"]
 	path = backend
 	url = https://github.com/coachpo/beacon-spear-backend.git
+	branch = main
 [submodule "frontend"]
 	path = frontend
 	url = https://github.com/coachpo/beacon-spear-frontend.git
+	branch = main
 [submodule "edge"]
 	path = edge
 	url = https://github.com/coachpo/beacon-spear-edge.git
