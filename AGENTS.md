@@ -27,3 +27,4 @@ For package-specific commands and conventions, prefer the closest file:
 - `docs/`: PRD/specs, OpenAPI (`docs/openapi.yaml`)
 - `backend/`: Django project
 - `frontend/`: Next.js project
+- `edge/`: Edge Functions project
